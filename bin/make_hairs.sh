@@ -1,0 +1,2 @@
+#python /sc/orga/work/bashia02/gitrepos/ryan-neff-bashir-lab-rotation/scripts/fake_hairs_snps_ali.py -i all.sorted.bam -v IGV_VCF_no_header.vcf -o myhairs.hairs
+/sc/orga/work/webste01/gitrepos/hapcut/extractHAIRS --mbq 0  --maxIS 1000000 --noquality 7 --qvoffset 33 --VCF /sc/orga/scratch/webste01/mrsa_analysis/scripts/tmp.vcf --bam /sc/orga/scratch/webste01/mrsa_analysis/all.sorted.bam > myhairs.hairs
