@@ -5,10 +5,10 @@ import os
 import shelve
 
 kb=20000
-branch_file = "/sc/orga/scratch/webste01/mrsa_analysis/branching_tigs_fake.txt"
-ann_bam = pysam.AlignmentFile("/sc/orga/scratch/webste01/mrsa_analysis/output.ann.bam", "rb")
-ref = pysam.FastaFile("/sc/orga/scratch/webste01/mrsa/mrsa_only/sequence/mrsa_only.fasta")
-ref_fas = "/sc/orga/scratch/webste01/mrsa/mrsa_only/sequence/mrsa_only.fasta"
+branch_file = "/sc/orga/work/webste01/gitrepos/MRSA_separation/data/branching_tigs_fake.txt"
+ann_bam = pysam.AlignmentFile("/sc/orga/work/webste01/gitrepos/MRSA_separation/data/output.ann.bam", "rb")
+ref = pysam.FastaFile("/sc/orga/work/webste01/gitrepos/MRSA_separation/data/reference.fasta")
+ref_fas = "/sc/orga/work/webste01/gitrepos/MRSA_separation/data/reference.fasta"
 
 #Get the branching unitigs from the branch file
 def make_branching_dict(branch_file):
