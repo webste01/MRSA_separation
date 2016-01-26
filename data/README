@@ -1,0 +1,8 @@
+#Readme for the files located in /sc/orga/work/webste01/gitrepos/MRSA_separation/data:
+
+output.ann.bam: Bam file for the combined MRSA assembly(strain 020180 and strain 020042), that has gone through Ryans greedy partitioner and has reads labelled with two different haplotypes (1/2) in the ZH tag.
+
+branching_tigs_fake.txt: File that I created from the visualization of the celera assembly generated GML. It lists the neighbors of each node in the graph. Columns are: unitig degree pred1 pred2 succ1 succ2. I made this manually but can make a script to generate this automatically. 
+
+reference.fasta: reference for the combined assembly of the two MRSA strains.
+
