@@ -8,6 +8,17 @@ class overlap:
         self.score, self.pctiden = score, pctiden
         self.strand1, self.start1, self.end1, self.len1 = strand1, start1, end1, len1
         self.strand2, self.start2, self.end2, self.len2 = strand2, start2, end2, len2
+        # code to help with alternative alignment output formats
+        if self.strand1 == "+":
+            self.strand1 = 0
+        elif self.strand1 == "-":
+            self.strand1 = 1
+            
+        if self.strand2 == "+":
+            self.strand2 = 0
+        elif self.strand2 == "-":
+            self.strand2 = 1
+
 
     def contained ( self, tolerance=200 ):
         if self.contained1() or self.contained2():
