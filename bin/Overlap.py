@@ -38,6 +38,58 @@ class overlap:
     def __str__ ( self ):
         print "%s %s %s %s" %(self.name1, self.name2, self.score, self.pctiden)
 
+    def hasOverhang (self, overhangmin = 500, tolerance=200):
+        if self.contained(): return False
+
+        beg_gap2 = self.start2 # gap in the contig to end
+        end_gap2 = self.len2-self.end2                    
+        beg_thresh = beg_gap2 + overhangmin
+        end_thresh = end_gap2 + overhangmin
+
+        if self.strand1 == 0:
+            
+            if self.strand2 == 0:
+                # ----->    (query)
+                #   xx--->  (ref)
+                if (self.len1 - self.end1 < tolerance) and (self.start2 < tolerance): 
+                    if self.start1 > beg_thresh: return True
+                #   ------>
+                # -----XX>
+                if (self.len2 - self.end2 < tolerance) and (self.start1 < tolerance): 
+                    if self.len1 - self.end1 > end_thresh: return True
+            else:
+                # ------->
+                #    <XX----------
+                if (self.len1 - self.end1 < tolerance) and (self.len2-self.end2 < tolerance): 
+                    if self.start1 > end_thresh: return True
+                
+                #   ----------->
+                # <-----XX
+                if (self.start2 < tolerance) and (self.start1 < tolerance): 
+                    if self.len1-self.end1 > end_: return True
+
+        else:
+            if self.strand2 == 0:
+                # <----------
+                #      XX--------->
+                if (self.start1 < tolerance) and (self.start2 < tolerance): 
+                    if self.len1-self.end1 > beg_thresh: return True
+                #   <------------
+                # -------XX>
+                if (self.len2 - self.end2 < tolerance) and (self.len1 - self.end1 < tolerance): 
+                    if self.start1 > end_thresh: return True
+
+                # last two cases will never happen
+                # <-------
+                #     <----------
+                #      <------------
+                # <----------
+
+        return False
+
+
+        
+
     def hasFullOverlap(self, tolerance=200):
         # query contained
 
