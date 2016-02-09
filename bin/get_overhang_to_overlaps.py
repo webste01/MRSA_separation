@@ -4,7 +4,7 @@ from Overlap import overlap
 from collections import Counter
 
 BLASR = "/sc/orga/projects/bashia02b/tools/bin/blasr"
-NPROC = 1
+NPROC = 32
 
 def constructOverlap (bamfile, ah, edge, tolerance):
     qid = ah.query_name
@@ -28,7 +28,7 @@ def checkReadOverhang(bamfile, ah, edge, tolerance):
         return True
     return False
 
-def findContigOverhangReads (bamfile, fastafile, contig, seqfn=False, fastafn=None, edge=2000, tolerance=200):
+def findContigOverhangReads (bamfile, fastafile, contig, seqfn=False, fastafn=None, edge=2000, tolerance=300):
     
     end = fastafile.get_reference_length(contig)
     tempreadsleft = bamfile.fetch(contig, 0, edge)
@@ -41,18 +41,22 @@ def findContigOverhangReads (bamfile, fastafile, contig, seqfn=False, fastafn=No
         if checkReadOverhang(bamfile, ah, edge, tolerance):
             hap = 0
             try:
-                hap = ah.get_tag('ZH').split(",")[1]
+                hap = int(ah.get_tag('ZH').split(",")[1])
             except:
                 pass
+            if hap == 0: # this removes uninformative reads
+                continue
             leftreadsDict[ah.qname] = hap
             reads.append((ah.qname, ah.seq))
     for ah in tempreadsright:
         if checkReadOverhang(bamfile, ah, edge, tolerance):
             hap = 0
             try:
-                hap = ah.get_tag('ZH').split(",")[1]
+                hap = int(ah.get_tag('ZH').split(",")[1])
             except:
                 pass
+            if hap == 0: # this removes uninformative reads
+                continue
             rightreadsDict[ah.qname] = hap
             reads.append((ah.qname, ah.seq))
 
@@ -87,13 +91,16 @@ def AltAnchoredContigs (bamfile, bam_indexer,  fasta_file, alt_contigs, contig, 
     for read_name, hap in read_dict.items():
         read_indexer = bam_indexer.find(read_name)
         overlap_contigs = set()
-        for ah in read_indexer:
+        for ah in read_indexer: # iterate through alignments for curr read
+            if ah.reference_id < 0: # weird check for malformed refids
+                continue
             tid = bamfile.getrname(ah.reference_id)
             if tid != contig: # ignore if its the seed contig
                 ov = constructOverlap(bamfile, ah, edge, tolerance)
                 if ov.hasFullOverlap(): overlap_contigs.add(tid)
         if len(overlap_contigs) == 1:
-            haplotypes.setdefault(hap, Counter())[tid] += 1
+            oid = overlap_contigs.pop() # get the element in overlap contigs
+            haplotypes.setdefault(hap, Counter())[oid] += 1
     return haplotypes
 
 def printContigSummary(contig, leftjoins, rightjoins):
